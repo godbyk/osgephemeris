@@ -65,7 +65,7 @@ void *Shmem::operator new( size_t size, const std::string &file)
         if( (fd = creat( file.c_str(), O_RDWR | 0666 )) < 0 )
 	    {
 	        char emsg[128];
-	        printf( emsg, "Shmem: open(%s)", file.c_str() );
+	        sprintf( emsg, "Shmem: open(%s)", file.c_str() );
     	    perror( emsg );
             throw 3;
 	    }
