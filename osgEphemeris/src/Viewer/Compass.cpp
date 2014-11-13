@@ -161,20 +161,21 @@ void Compass::traverse(osg::NodeVisitor&nv)
     if( nv.getVisitorType() == osg::NodeVisitor::CULL_VISITOR )
     {
         osgUtil::CullVisitor *cv = dynamic_cast<osgUtil::CullVisitor *>(&nv);
-        osg::Matrix ivm = cv->getState()->getInitialViewMatrix();
-        ivm(3,0) = ivm(3,1) = ivm(3,2) = 0.0;
-        osg::Vec3 v = osg::Vec3(0,1,0) * ivm * osg::Matrix::rotate( osg::PI*0.5, 1, 0, 0 );
-        double a = atan2( v[0], v[1] );
-        _tx->setMatrix( 
-                osg::Matrix::rotate( -a, 0, 0, 1 ) * 
-                osg::Matrix::translate( 0.0, 3.0, -0.05 ) *
-                osg::Matrix::rotate( -osg::PI*0.5, 1, 0, 0 ) );
+        if ( cv != NULL ) {
+            osg::Matrix ivm = cv->getState()->getInitialViewMatrix();
+            ivm(3,0) = ivm(3,1) = ivm(3,2) = 0.0;
+            osg::Vec3 v = osg::Vec3(0,1,0) * ivm * osg::Matrix::rotate( osg::PI*0.5, 1, 0, 0 );
+            double a = atan2( v[0], v[1] );
+            _tx->setMatrix( 
+                    osg::Matrix::rotate( -a, 0, 0, 1 ) * 
+                    osg::Matrix::translate( 0.0, 3.0, -0.05 ) *
+                    osg::Matrix::rotate( -osg::PI*0.5, 1, 0, 0 ) );
 
-        osg::Vec4d cp = osg::Vec4d(0.0, -1.0, 0.0, -0.75 ) * osg::Matrix::rotate( a, 0, 0, 1 );
-        _clipPlane->setClipPlane( cp );
+            osg::Vec4d cp = osg::Vec4d(0.0, -1.0, 0.0, -0.75 ) * osg::Matrix::rotate( a, 0, 0, 1 );
+            _clipPlane->setClipPlane( cp );
 
-        _ltx->setMatrix( osg::Matrix::rotate(  a, 0, 0, 1 ) );
-
+            _ltx->setMatrix( osg::Matrix::rotate(  a, 0, 0, 1 ) );
+        }
 
     }
     osg::Projection::traverse( nv );
