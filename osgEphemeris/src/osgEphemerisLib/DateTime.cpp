@@ -79,6 +79,7 @@ DateTime::DateTime(bool initialize)
 {
     if( initialize )
     {
+        _tzoff = 0;
         now();
     }
 }
